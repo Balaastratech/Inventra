@@ -768,44 +768,6 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 ---
 
-## 16. Known limits
-
-Honest list. Detail in [test_report.md](test_report.md).
-
-- **`INSUFFICIENT_DATA` returns `BLOCKED`, not `NEEDS_INFORMATION`** — off-spec
-  against the case-flow document. See §9.3.
-- **Nothing ever confirms an order.** Only `PENDING`, `FAILED` and `CANCELLED`
-  are ever written; `CONFIRMED` is defined but unreachable because there is no
-  supplier acknowledgement channel. `PENDING` means "written and not withdrawn",
-  never "the supplier committed".
-- **`confirmed_inbound` is never written** by this system. The reorder guard
-  compensates by counting open `PENDING` orders instead.
-- **Re-approving a byte-identical cancelled proposal no-ops.** `proposal_hash`
-  contains no `case_id` or timestamp, so a proposal cancelled and then
-  re-approved with every hashed field unchanged collides with its own old
-  `idempotency_key` and returns the cancelled row. Real stock and price drift
-  makes this unlikely but it is not guarded.
-- **No two-way email.** Outbound works; nothing reads replies.
-- **Email cannot be tested locally.** `smtp_host`/`smtp_port` are hardcoded and
-  `starttls()`/`login()` are unconditional, so Mailpit/MailHog cannot be
-  substituted.
-- **[Resolved 2026-09-13] Vendor contact emails were synthetic**
-  (`<vendor_id>@example-vendor.test`). `V-FAST`, `V-CHEAP`, and `V-BALANCED`
-  now have real contact emails set directly in `database/seed.py`'s `VENDORS`
-  tuple (so they survive every reseed); `V-SLOW` and `V-UNRELIABLE` remain
-  `NULL` — deliberately, since no real address was given for them.
-- **One test docstring is stale (the test itself is fine).**
-  `test_phase10_cancel_purchase_request.py::test_cancelling_releases_no_budget_and_says_so`
-  says "create_purchase_request never increments committed_amount" — no longer
-  true. The **assertions are still correct**: its helper `_insert_request()`
-  writes a `purchase_requests` row directly via SQL and omits
-  `committed_budget_month`, so nothing was ever reserved for that row and
-  cancelling correctly releases nothing. It coexists with
-  `test_phase11_budget_and_reorder_guard.py` (which proves the normal path does
-  reserve and release) because the two cover genuinely different cases. Only the
-  docstring and the test name mislead.
-
----
 
 ## 17. File map
 

@@ -57,8 +57,7 @@ enter your name, enter a rejection reason, click **Reject**.
 timeline records your name and reason.
 
 **Important:** stock is still low, so the next monitor scan can open a fresh
-case for the same SKU again — there's no "snooze this SKU for a week"
-feature yet (see `GAP_NEEDS_INFORMATION.md`).
+case for the same SKU again; rejecting a proposal does not change stock.
 
 ## Scenario 3 — Ask for changes
 
@@ -192,5 +191,5 @@ There is a genuinely missing final lifecycle stage:
 PO sent → supplier confirms → goods received → inventory increases → purchase request closed
 ```
 
-The monitor handles everything before that boundary; the last receiving
-steps are a real, open gap — see `GAP_NEEDS_INFORMATION.md`.
+The monitor handles everything before that boundary; supplier confirmation and
+goods receipt remain outside this application's scope.

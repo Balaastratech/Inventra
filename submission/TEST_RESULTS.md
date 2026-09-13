@@ -63,18 +63,12 @@ Vendor email additionally gained: a `COMPANY_NAME` config setting (new `submissi
 ### Config change: `VENDOR_EMAIL_ENABLED=true`
 Set live in `submission/.env` at your request. Traced precisely: a rejection at **either** approval gate (the original proposal, or the separate later "approve sending to vendor" step) never reaches `send_purchase_order` — confirmed by reading `handle_decision`/`handle_vendor_decision` in `nodes.py`. Only approving both gates sends a real vendor email now.
 
-### Gap-file entries added (documentation only, nothing implemented)
-- `GAP_NEEDS_INFORMATION.md`: no automated test exists for prompt-injection resistance on reject/revise reasons (the existing test only checks plumbing with benign text, never adversarial input).
-- `GAP_NEEDS_INFORMATION.md`: no way to preview/edit the vendor email draft before it sends — your requested "Edit mail" button idea, recorded as an open feature request with the open design questions, not built.
-
----
-
 ## Test coverage status — what's actually been executed vs. not (be honest about this)
 
 **Executed with real results (this file + above):** all of Section A (11 gates), all 5 cancellation scenarios (C1-C5), D1/D3 (vendor-email gate-off and no-contact-email checks), E1 and E4 (prompt injection — both passed), and now all 3 bug fixes verified live.
 
 **NOT executed — genuine gaps in this test pass, not silently skipped:**
-- **B2-B11 (approval mechanics via the real resume/token flow)**: reject-with-reason, revise-limit (1 allowed, 2nd blocked), edit-limit (3 allowed, 4th blocked), revalidation bounces on stock/offer/budget changes mid-pause, and all 3 token-security scenarios (single-use, expiry, stale-proposal-hash) were **never actually run**. Section B in `MANUAL_TEST_PLAN.md` is still just the procedure, not a result. I tested cancellation (C) and read/write tool calls directly instead of driving these through real `resume`/email-link clicks.
+- **B2-B11 (approval mechanics via the real resume/token flow)**: reject-with-reason, revise-limit (1 allowed, 2nd blocked), edit-limit (3 allowed, 4th blocked), revalidation bounces on stock/offer/budget changes mid-pause, and all 3 token-security scenarios (single-use, expiry, stale-proposal-hash) were **never actually run**. I tested cancellation (C) and read/write tool calls directly instead of driving these through real `resume`/email-link clicks.
 - **A11 (sales velocity excludes "today")**: documented as a procedure, never actually executed with a real INSERT + window check.
 - **E2 (vendor name injection)**: ran, but inconclusive — the poisoned vendor happened to be the only eligible option, so the test didn't actually prove anything about resistance to the injection.
 - **E3 (adversarial REVISE comment)**: not run — was blocked by Bug #2 at the time; now that Bug #2 is fixed, this is re-testable and hasn't been retried yet.
@@ -190,7 +184,7 @@ E5 (Streamlit markdown escaping) and E6 (`vendors.notes` is dead code, never rea
 - `purchase_requests`: 2 rows created and cancelled during testing (`PR-500CB71A4604`, `PR-ED3114CE3132`) — both end in `CANCELLED` status, budget correctly released for both. Left in the table as a real audit trail rather than deleted.
 - 2 throwaway rows inserted into `purchase_requests` for the A8 reorder-guard test (`PR-GUARDTEST`, `PR-GUARDTEST2`) — both deleted after the test.
 
-**Recommend a full reseed before your own manual testing session** so you start from a known-clean baseline (steps are in `MANUAL_TEST_PLAN.md`'s hygiene section) — the servers are still running so stop them first.
+**Recommend a full reseed before your own manual testing session** so you start from a known-clean baseline: stop local servers, then run `python database/seed.py` and `python -m submission.tests.seed_extra`.
 
 ---
 

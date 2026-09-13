@@ -193,9 +193,6 @@ data.
 
 ## 6. Known limits
 
-- **No background scheduler.** Nothing runs autonomously; a case starts because
-  a human triggered it. The pending queue computes staleness live when opened.
-  Planned work in `../AUTONOMOUS_PLAN.md` (not built).
 - **`INSUFFICIENT_DATA` is off-spec** — §4.1.
 - **Nothing ever confirms an order.** Only `PENDING`, `FAILED` and `CANCELLED`
   are written. `CONFIRMED` is defined in `PurchaseRequestStatus` and

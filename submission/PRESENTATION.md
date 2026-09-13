@@ -335,9 +335,7 @@ Full evidence, real command output, and DB state before/after every finding:
   reason — only manually verified once, live.
 - No two-way email — replies aren't read.
 
-Full list with reasoning for each: [`../GAP_NEEDS_INFORMATION.md`](../GAP_NEEDS_INFORMATION.md).
-Planned-but-not-built ideas (proactive monitoring, auto-redraft on fixable
-policy failures, two-way email): [`../UPGRADES.md`](../UPGRADES.md).
+For current operational limits and safeguards, see the repository README.
 
 ---
 

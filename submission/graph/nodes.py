@@ -1122,8 +1122,7 @@ def execute_purchase(state: CaseState) -> CaseState:
     # Keyed on proposal_hash alone, not proposal_hash:approver -- the same
     # proposal approved by two different people must still dedupe to one
     # purchase_requests row (create_purchase_request's own contract).
-    # Approver-scoping made that collide only by coincidence; see
-    # "Idempotency Key Is Approver-Scoped" in GAP_NEEDS_INFORMATION.md.
+    # An approver-scoped key could allow duplicate orders for the same proposal.
     idempotency_key = state.get("idempotency_key") or proposal.proposal_hash
     state["idempotency_key"] = idempotency_key
 

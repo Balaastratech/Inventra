@@ -1,5 +1,5 @@
 """
-Three closed gaps from GAP_NEEDS_INFORMATION.md, 2026-09-11:
+Three closed workflow gaps, 2026-09-11:
 
   * No reorder guard -- a re-run for the same sku/warehouse proposed a
     second order for stock already ordered, because confirmed_inbound is
@@ -19,9 +19,8 @@ proposal_hash is deterministic (sku, warehouse_id, quantity, unit_price,
 vendor_id, target_cover_days -- no case_id or timestamp), so two runs
 against the *same* warehouse in the same module produce byte-identical
 proposals and collide on idempotency_key. That's a real, separate, narrow
-edge case (a cancelled request's idempotency_key blocks a later identical
-approval from creating a fresh row) -- recorded in
-GAP_NEEDS_INFORMATION.md, not fixed here.
+edge case: a cancelled request's idempotency_key blocks a later identical
+approval from creating a fresh row. It is intentionally not covered here.
 """
 
 from __future__ import annotations

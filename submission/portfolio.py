@@ -168,8 +168,7 @@ def scan_portfolio(
 
     target_cover_days is a **test-only override**. In normal operation each
     row is judged against its own sku_policy.derived_cover_days (Phase B) --
-    never a flat number for every product (see AUTONOMOUS_PLAN.md problem
-    §0.2 / rule R11). A pair with no policy row yet, or one that has not
+    never a flat number for every product. A pair with no policy row yet, or one that has not
     reached ESTABLISHED maturity, is labelled as such rather than silently
     falling back to config.target_cover_default_days.
     """

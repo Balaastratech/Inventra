@@ -212,8 +212,8 @@ def get_open_order_quantity(sku: str, warehouse_id: str) -> int:
     a re-run of the same case sees unchanged stock and proposes a second
     order for units already in flight. Folding this into compute_risk's
     available_units is the guard until a real supplier-confirmation path
-    exists to write confirmed_inbound instead (see CONFIRMED-unreachable
-    gap in GAP_NEEDS_INFORMATION.md -- out of scope here)."""
+    exists to write confirmed_inbound instead. Supplier confirmation remains
+    outside this application's scope."""
     conn = _get_db_connection()
     cursor = conn.cursor()
     cursor.execute(

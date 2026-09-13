@@ -16,7 +16,6 @@ deterministic Python.
 | **Architecture, charters, permission matrix** | [design.md](design.md) |
 | **Scenario-by-scenario results** | [test_report.md](test_report.md) |
 | **Live manual test pass (2026-09-13) — 3 real bugs found and fixed** | [TEST_RESULTS.md](TEST_RESULTS.md) |
-| **Full manual QA procedure (36 scenarios, step-by-step)** | [MANUAL_TEST_PLAN.md](MANUAL_TEST_PLAN.md) |
 | **Explainer for presenting this system to someone else** | [PRESENTATION.md](PRESENTATION.md) |
 
 > **Everything in this file was verified by running it**, not copied from the
@@ -290,7 +289,7 @@ Measured from a freshly seeded database, not from the brief. Warehouse `DEL-01`:
 | AC-001 | 40 | 2.57 | 2.90 | 15.6d / 13.8d | ⚠️ **Nondeterministic** — see below |
 | AC-002 | 32 | 2.57 | 2.90 | — | `BLOCKED` `DATA_STALE` (snapshot 78.0h vs 48.0h limit) |
 | AC-003 | 15 | 1.71 | 1.93 | 8.8d / 7.8d | `AWAITING_APPROVAL` — FastShip Inc., 14 units, $4200 |
-| AC-004 | 12 | 2.57 | 2.90 | 4.7d / 4.1d | `AWAITING_APPROVAL` on a clean budget (23 units, Standard Supplier, **$10,350** total, well under the $15,000 remaining) — reaches `BLOCKED`/`EXCEPTION` only if you first tighten `monthly_budgets` yourself (see `MANUAL_TEST_PLAN.md` §A6/A7). Figure corrected 2026-09-13 — this row previously said $18,000, which no longer matches the seeded offer price. |
+| AC-004 | 12 | 2.57 | 2.90 | 4.7d / 4.1d | `AWAITING_APPROVAL` on a clean budget (23 units, Standard Supplier, **$10,350** total, well under the $15,000 remaining). It reaches `BLOCKED`/`EXCEPTION` only if the warehouse budget is tightened first. Figure corrected 2026-09-13 — this row previously said $18,000, which no longer matches the seeded offer price. |
 | AC-005 | 90 | 1.71 | 1.93 | 52.6d / 46.6d | `NO_ACTION` |
 | AC-006 | 10 | 1.71 | 1.93 | 5.9d / 5.2d | `BLOCKED` — no eligible vendor (reliability or deadline) |
 | REF-001 | — | — | — | — | `BLOCKED` `NOT_FOUND` (no snapshot at DEL-01) |
@@ -886,12 +885,6 @@ policy.md                     prose read by the Policy Reviewer each run
 - **Understand the design rationale** → [design.md](design.md)
 - **Check automated scenario coverage (2026-09-11 snapshot)** → [test_report.md](test_report.md)
 - **See the 2026-09-13 live manual test pass and the 3 bugs it found/fixed** → [TEST_RESULTS.md](TEST_RESULTS.md)
-- **Run the manual QA procedure yourself** → [MANUAL_TEST_PLAN.md](MANUAL_TEST_PLAN.md)
-- **See every automated test in one line each** → [TEST_CATALOG_REFERENCE.md](TEST_CATALOG_REFERENCE.md)
-- **See what's deliberately unfinished** → [../GAP_NEEDS_INFORMATION.md](../GAP_NEEDS_INFORMATION.md)
 - **Use the autonomous monitor** → [SIMULATOR_GUIDE.md](SIMULATOR_GUIDE.md) —
-  this originally planned "autonomous portfolio monitor" (`../AUTONOMOUS_PLAN.md`)
-  removing the human trigger is **now built**: `submission/monitor/service.py`
-  + the UI's Monitor screen scan a warehouse on a timer and open cases on
-  their own. `AUTONOMOUS_PLAN.md` is kept as the original design record.
-- **See planned upgrades not yet built** → [../UPGRADES.md](../UPGRADES.md)
+  `submission/monitor/service.py` and the UI's Monitor screen scan a warehouse
+  on a timer and open cases on their own.

@@ -27,3 +27,27 @@ _kiro_junit.xml
 .claude/
 .kiro/
 .pptx_build/
+
+# Internal planning, agent work products, and source reference material.
+# These remain on the local workstation but are not part of the public product repository.
+/PHASE*_PLAN.md
+/PLAN.md
+/AUTONOMOUS_PLAN.md
+/AUTONOMOUS_TRACKER.md
+/DECISIONS.md
+/GAP_*.md
+/UPGRADES.md
+/CLAUDE.md
+/Inventra_Agent_Readable_Pack/
+/docs/testing/
+/submission/MANUAL_TEST_PLAN.md
+/submission/TEST_CATALOG_REFERENCE.md
+/test_tools.ipynb
+/Inventra Case Flow.pdf
+/Inventra Case Graph.pdf
+/Investigator Agent Interface.pdf
+/Policy_Proposal Agent Interface.pdf
+/Sourcing Agent Interface.pdf
+/The Reorder Journey.pdf
+/Inventra_Student_Design_Challenge.docx
+/Inventra_Technical_Review.pptx

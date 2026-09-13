@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0",
+  "project": "Inventra",
+  "pack_purpose": "agent-readable conversion of supplied project documents",
+  "primary_format": "markdown",
+  "machine_index_format": "json",
+  "documents": [
+    {
+      "id": "reorder_journey",
+      "file": "01_the_reorder_journey.md",
+      "role": "stakeholder_plain_english",
+      "authority": "explanatory"
+    },
+    {
+      "id": "investigator_interface",
+      "file": "02_investigator_agent_interface.md",
+      "role": "agent_contract",
+      "authority": "implementation_interface"
+    },
+    {
+      "id": "sourcing_interface",
+      "file": "03_sourcing_agent_interface.md",
+      "role": "agent_contract",
+      "authority": "implementation_interface"
+    },
+    {
+      "id": "policy_proposal_interface",
+      "file": "04_policy_proposal_agent_interface.md",
+      "role": "agent_contract",
+      "authority": "implementation_interface"
+    },
+    {
+      "id": "case_flow",
+      "file": "05_inventra_case_flow.md",
+      "role": "architecture_overview",
+      "authority": "design_snapshot"
+    },
+    {
+      "id": "case_graph",
+      "file": "06_inventra_case_graph.md",
+      "role": "orchestration_contract",
+      "authority": "implementation_interface"
+    },
+    {
+      "id": "student_design_challenge",
+      "file": "07_inventra_student_design_challenge.md",
+      "role": "requirements_brief",
+      "authority": "primary_requirements"
+    },
+    {
+      "id": "technical_review",
+      "file": "08_inventra_technical_review.md",
+      "role": "implementation_review",
+      "authority": "implementation_snapshot_2026-08-30"
+    },
+    {
+      "id": "compact_context",
+      "file": "INVENTRA_AGENT_CONTEXT.md",
+      "role": "consolidated_context",
+      "authority": "derived"
+    }
+  ],
+  "source_priority": {
+    "requirements": [
+      "07_inventra_student_design_challenge.md"
+    ],
+    "implementation_status": [
+      "08_inventra_technical_review.md",
+      "06_inventra_case_graph.md",
+      "02_investigator_agent_interface.md",
+      "03_sourcing_agent_interface.md",
+      "04_policy_proposal_agent_interface.md"
+    ],
+    "architecture": [
+      "06_inventra_case_graph.md",
+      "05_inventra_case_flow.md"
+    ],
+    "stakeholder_explanation": [
+      "01_the_reorder_journey.md"
+    ]
+  },
+  "agents": {
+    "investigator": {
+      "purpose": "determine whether sourcing is needed",
+      "tools": [
+        "get_product",
+        "get_stock_position",
+        "get_sales_velocity",
+        "calculate_stock_risk"
+      ],
+      "statuses": [
+        "NO_ACTION",
+        "NEEDS_INFORMATION",
+        "BLOCKED",
+        "AT_RISK"
+      ],
+      "forward_status": "AT_RISK",
+      "handoff_object": "StockRisk"
+    },
+    "sourcing": {
+      "purpose": "find a grounded eligible vendor option",
+      "tools": [
+        "list_vendor_offers",
+        "get_vendor_performance",
+        "build_vendor_options",
+        "recommend_vendor_option"
+      ],
+      "statuses": [
+        "BLOCKED",
+        "ELIGIBLE"
+      ],
+      "forward_status": "ELIGIBLE",
+      "handoff_object": "VendorRecommendation"
+    },
+    "policy_proposal": {
+      "purpose": "apply policy/budget guardrails and prepare proposal for human approval",
+      "tools": [
+        "get_budget_position",
+        "get_policy_guidance",
+        "draft_replenishment_proposal"
+      ],
+      "statuses": [
+        "BLOCKED",
+        "AWAITING_APPROVAL"
+      ],
+      "forward_status": "AWAITING_APPROVAL",
+      "handoff_object": "ReplenishmentProposal"
+    }
+  },
+  "business_rules": {
+    "inventory_freshness_hours_max": 2,
+    "available_units_formula": "on_hand - reserved + confirmed_inbound",
+    "sales_windows_days": [
+      7,
+      30
+    ],
+    "target_cover_days_default": 14,
+    "target_cover_days_range": [
+      7,
+      45
+    ],
+    "vendor_reliability_min": 0.9,
+    "arrival_requirement": "before projected stockout for normal recommendation",
+    "budget_requirement": "total proposed cost fits latest remaining monthly budget for normal progression",
+    "approval": "named human approves exact proposal version/hash",
+    "post_approval_revalidation": [
+      "inventory",
+      "offer validity",
+      "proposal hash",
+      "budget"
+    ],
+    "duplicate_safety": "idempotency key plus unique database constraint"
+  },
+  "write_boundary": {
+    "agent_can_write_purchase": false,
+    "write_node": "execute_purchase",
+    "write_tool": "create_purchase_request",
+    "prerequisites": [
+      "human approval",
+      "passing revalidation",
+      "idempotency protection"
+    ]
+  },
+  "terminal_business_outcomes": [
+    "NO_ACTION",
+    "NEEDS_INFORMATION",
+    "BLOCKED",
+    "PURCHASE_REQUEST_CREATED"
+  ],
+  "nonterminal_workflow_statuses": [
+    "AT_RISK",
+    "ELIGIBLE",
+    "AWAITING_APPROVAL"
+  ],
+  "known_source_ambiguities": [
+    "Case Flow labels Sourcing and Policy/Proposal as PLANNED, while later interface documents label them Built & tested.",
+    "Invalid-model-output Scenario 6 implementation status is inconsistent across the supplied Case Flow and Technical Review.",
+    "Technical Review uses both four terminal business states and wording about five terminal states; AWAITING_APPROVAL is treated in this pack as a nonterminal paused workflow status.",
+    "Some PDF table right columns are physically clipped by the original browser-to-PDF export."
+  ]
+}

@@ -1,0 +1,29 @@
+# Secrets and local configuration
+.env
+submission/.env
+*.pem
+*.key
+
+# Python caches and test state
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Generated local databases, checkpoints, and monitor state
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+submission/monitor_state.json
+
+# Local artifacts; publish source files, not generated archives or logs
+*.zip
+*.log
+~$*
+_kiro_junit.xml
+
+# Editor and operating-system artifacts
+.DS_Store
+.claude/
+.kiro/
+.pptx_build/
